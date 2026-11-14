@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0b1020">
-<title>Speedcubing Elo Calculator</title>
+<title>SC-Elo · Speedcubing Rating Calculator</title>
 <style>
 :root{color-scheme:dark;--bg:#090d18;--panel:#111827;--panel2:#172235;--text:#f4f7fb;--muted:#9aa8bc;--line:#26344a;--accent:#8b5cf6;--accent2:#22d3ee;--green:#5eead4}
 *{box-sizing:border-box}
@@ -15,7 +15,7 @@ header{margin-bottom:28px}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 14px var(--green)}
 h1{font-size:clamp(2.1rem,6vw,3.7rem);line-height:1.04;letter-spacing:-.055em;margin:14px 0 12px}
 h1 span{background:linear-gradient(90deg,#c4b5fd,#67e8f9);-webkit-background-clip:text;background-clip:text;color:transparent}
-.sub{color:var(--muted);max-width:610px;margin:0;font-size:1.02rem}
+.sub{color:var(--muted);max-width:650px;margin:0;font-size:1.02rem}
 .layout{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;align-items:stretch}
 .card{background:linear-gradient(145deg,rgba(23,34,53,.96),rgba(14,22,36,.96));border:1px solid var(--line);border-radius:22px;padding:25px;box-shadow:0 20px 70px #0003}
 .card h2{font-size:1rem;margin:0 0 22px;letter-spacing:.01em}
@@ -27,17 +27,18 @@ input[type=number]{font-variant-numeric:tabular-nums}
 .hint{font-size:.76rem;color:#74849b;margin-top:8px}
 button{width:100%;margin-top:20px;border:0;border-radius:12px;padding:14px 18px;background:linear-gradient(100deg,#8b5cf6,#4f8df7);color:white;font:700 1rem inherit;cursor:pointer;box-shadow:0 9px 25px #6045c744;transition:transform .15s,filter .15s}
 button:hover{filter:brightness(1.1);transform:translateY(-1px)}
-.result{display:flex;flex-direction:column;justify-content:center;min-height:260px;text-align:center;position:relative;overflow:hidden}
+.result{display:flex;flex-direction:column;justify-content:center;min-height:280px;text-align:center;position:relative;overflow:hidden}
 .result:before{content:"";position:absolute;width:240px;height:240px;border-radius:50%;background:#8b5cf61c;filter:blur(35px);top:5px;left:50%;transform:translateX(-50%)}
 .result>*{position:relative}
 .result-label{color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.15em;font-weight:800}
 .rating{font-size:clamp(4.2rem,12vw,6.3rem);line-height:1.12;font-weight:850;letter-spacing:-.07em;margin:12px 0;background:linear-gradient(180deg,#fff,#a5f3fc);-webkit-background-clip:text;background-clip:text;color:transparent;font-variant-numeric:tabular-nums}
 .result-caption{color:var(--muted);font-size:.9rem}
-.statline{display:flex;justify-content:center;gap:10px;margin-top:24px;flex-wrap:wrap}
+.tier{display:inline-flex;align-self:center;margin-top:12px;padding:7px 13px;border:1px solid #6d5ca5;border-radius:999px;background:#8b5cf622;color:#ddd6fe;font-size:.82rem;font-weight:750}
+.statline{display:flex;justify-content:center;gap:10px;margin-top:20px;flex-wrap:wrap}
 .pill{border:1px solid var(--line);border-radius:999px;padding:7px 12px;color:#cbd5e1;font-size:.78rem;background:#0b132277}
 .note{margin-top:18px;color:#8492a6;font-size:.82rem;text-align:center}
 footer{margin-top:24px;text-align:center;color:#68778d;font-size:.78rem}
-@media(max-width:700px){main{padding:36px 16px 48px}.layout{grid-template-columns:1fr}.card{padding:21px}.result{min-height:220px}}
+@media(max-width:700px){main{padding:36px 16px 48px}.layout{grid-template-columns:1fr}.card{padding:21px}.result{min-height:240px}}
 @media(max-width:390px){.fields{grid-template-columns:1fr}}
 </style>
 </head>
@@ -45,70 +46,100 @@ footer{margin-top:24px;text-align:center;color:#68778d;font-size:.78rem}
 <main>
 <header>
   <div class="eyebrow"><span class="dot"></span> Cubing performance index</div>
-  <h1>Speedcubing <span>Elo Calculator</span></h1>
-  <p class="sub">Put an average and a year on the clock. See how that performance maps to the historical speedcubing Elo scale.</p>
+  <h1>Speedcubing <span>SC-Elo</span></h1>
+  <p class="sub">Find the SC-Elo rating for any 3×3 global average.</p>
 </header>
-<section class="layout" aria-label="Elo calculator">
+<section class="layout" aria-label="SC-Elo calculator">
   <div class="card">
-    <h2>Enter your performance</h2>
+    <h2>Enter a performance</h2>
     <div class="fields">
       <div>
         <label for="yr">YEAR</label>
-        <select id="yr"></select>
+        <select id="yr" aria-label="Select year">
+          <option value="2026" selected>2026</option>
+          <option value="2025">2025</option>
+          <option value="2024">2024</option>
+          <option value="2023">2023</option>
+          <option value="2022">2022</option>
+          <option value="2021">2021</option>
+          <option value="2020">2020</option>
+          <option value="2019">2019</option>
+          <option value="2018">2018</option>
+          <option value="2017">2017</option>
+          <option value="2016">2016</option>
+          <option value="2015">2015</option>
+          <option value="2014">2014</option>
+          <option value="2013">2013</option>
+          <option value="2012">2012</option>
+          <option value="2011">2011</option>
+          <option value="2010">2010</option>
+        </select>
       </div>
       <div>
-        <label for="avg">AVERAGE (SECONDS)</label>
-        <input id="avg" type="number" step="0.01" min="0.01" value="9.00" inputmode="decimal">
-        <div class="hint">Enter an average, e.g. 5.62</div>
+        <label for="avg">GLOBAL AVERAGE (SECONDS)</label>
+        <input id="avg" type="number" step="0.01" min="0.000001" value="9.00" inputmode="decimal">
+        <div class="hint">Any positive average works — e.g. 5.62 or 45.30</div>
       </div>
     </div>
-    <button id="go" type="button">Calculate Elo <span aria-hidden="true">↗</span></button>
-    <div class="note">Ratings below 1000 are displayed as 0.</div>
+    <button id="go" type="button">Calculate SC-Elo <span aria-hidden="true">↗</span></button>
   </div>
   <div class="card result" aria-live="polite">
-    <div class="result-label">Estimated Elo rating</div>
+    <div class="result-label">Estimated SC-Elo rating</div>
     <div class="rating" id="rating">—</div>
     <div class="result-caption" id="caption">Enter a valid average to calculate</div>
+    <div class="tier" id="tier">—</div>
     <div class="statline"><span class="pill" id="yearpill">Year: 2026</span></div>
   </div>
 </section>
-<footer>Historical benchmark data · 2010–2026</footer>
+<footer>SC-Elo · Historical performance comparison · 2010–2026</footer>
 </main>
 <script>
-const DATA={"2010":{"1":9.28,"2":10.58,"10":11.47,"100":13.34},"2011":{"1":8.51,"2":9.6,"10":10.44,"100":12.11},"2012":{"1":8.46,"2":9.32,"10":10.06,"100":11.52},"2013":{"1":7.8,"2":8.36,"10":9.51,"100":11.05},"2014":{"1":7.67,"2":8.43,"10":9.16,"100":10.66},"2015":{"1":7.52,"2":8.22,"10":8.77,"100":10.22},"2016":{"1":7.33,"2":7.87,"10":8.34,"100":9.78},"2017":{"1":6.89,"2":7.07,"10":7.88,"100":9.24},"2018":{"1":6.59,"2":6.8,"10":7.71,"100":8.88},"2019":{"1":6.48,"2":6.65,"10":7.2,"100":8.53},"2020":{"1":6.33,"2":6.45,"10":7.27,"100":8.53},"2021":{"1":5.87,"2":6.06,"10":6.88,"100":8.32},"2022":{"1":5.75,"2":5.8,"10":6.99,"100":7.92},"2023":{"1":5.38,"2":5.57,"10":6.41,"100":7.49},"2024":{"1":4.92,"2":5.22,"10":6.14,"100":7.23},"2025":{"1":4.64,"2":4.7,"10":5.45,"100":7.08},"2026":{"1":4.45,"2":4.48,"10":5.45,"100":6.89}};
-function scElo(year,average){
- if(!(average>0)) throw new Error("Average must be a positive number.");
- const d=DATA[year];let a,b;
- if(average<d[1]){a=[1,d[1]];b=[10,d[10]];}
- else if(average<=d[2]){a=[1,d[1]];b=[2,d[2]];}
- else if(average<=d[10]){a=[2,d[2]];b=[10,d[10]];}
- else{a=[10,d[10]];b=[100,d[100]];}
- const [ra,ta]=a,[rb,tb]=b;
- const logRank=Math.log10(ra)+Math.log(average/ta)/Math.log(tb/ta)*Math.log10(rb/ra);
- const raw=3000-400*logRank;
- return {rating:raw<1000?0:Math.round(raw),rank:Math.pow(10,logRank)};
+const FIRST_YEAR = 2010;
+const LAST_YEAR = 2026;
+function scElo(year, average) {
+  const y = Number(year);
+  const t = Number(average);
+  if (!Number.isFinite(t) || t <= 0) throw new Error("Enter an average greater than zero.");
+  if (!Number.isInteger(y) || y < FIRST_YEAR || y > LAST_YEAR) throw new Error("Select a year from 2010 to 2026.");
+  const numerator = 12000 + 900 * (2026 - y);
+  const rawRating = numerator / t;
+  return { rating: Math.round(rawRating), rawRating, numerator };
 }
-const yr=document.getElementById("yr"),avg=document.getElementById("avg");
-Object.keys(DATA).reverse().forEach(y=>{const o=document.createElement("option");o.value=y;o.textContent=y;yr.appendChild(o);});
-yr.value="2026";
-function run(){
- const v=Number(avg.value),year=yr.value;
- try{
-  const r=scElo(year,v);
-  document.getElementById("rating").textContent=r.rating.toLocaleString("en-US");
-  document.getElementById("caption").textContent=`For a ${v.toFixed(2)}s average in ${year}`;
-  document.getElementById("yearpill").textContent=`Year: ${year}`;
- }
- catch(e){
-  document.getElementById("rating").textContent="—";
-  document.getElementById("caption").textContent=e.message;
-  document.getElementById("yearpill").textContent=`Year: ${year}`;
- }
+function tierFor(rating) {
+  if (rating < 1200) return "Newbie";
+  if (rating < 1400) return "Pupil";
+  if (rating < 1600) return "Specialist";
+  if (rating < 1900) return "Expert";
+  if (rating < 2100) return "Candidate Master";
+  if (rating < 2300) return "Master";
+  if (rating < 2400) return "International Master";
+  if (rating < 2600) return "Grandmaster";
+  if (rating < 3000) return "International Grandmaster";
+  return "Legendary Grandmaster";
 }
-document.getElementById("go").addEventListener("click",run);
-yr.addEventListener("change",run);
-avg.addEventListener("input",run);
-avg.addEventListener("keydown",e=>{if(e.key==="Enter")run();});
+const yr = document.getElementById("yr");
+const avg = document.getElementById("avg");
+yr.value = "2026";
+function run() {
+  const year = yr.value;
+  const value = Number(avg.value);
+  try {
+    const result = scElo(year, value);
+    document.getElementById("rating").textContent = result.rating.toLocaleString("en-US");
+    document.getElementById("caption").textContent = `For a ${value.toFixed(2)}s global average in ${year}`;
+    document.getElementById("tier").textContent = tierFor(result.rating);
+    document.getElementById("yearpill").textContent = `Year: ${year}`;
+  } catch (error) {
+    document.getElementById("rating").textContent = "—";
+    document.getElementById("caption").textContent = error.message;
+    document.getElementById("tier").textContent = "—";
+    document.getElementById("yearpill").textContent = `Year: ${year}`;
+  }
+}
+document.getElementById("go").addEventListener("click", run);
+yr.addEventListener("change", run);
+avg.addEventListener("input", run);
+avg.addEventListener("keydown", event => { if (event.key === "Enter") run(); });
 run();
 </script>
 </body>
